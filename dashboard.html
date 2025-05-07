@@ -165,24 +165,22 @@
 
   <div class="content">
 
-<!-- ====== 비밀 친구 섹션 (secret) ====== -->
+<!-- ====== 비밀 친구 섹션 시작 ====== -->
 <div id="secret" class="section">
-  <!-- 1) 최상단 서브탭 -->
+  <!-- 서브탭 -->
   <div class="subtabs">
     <button class="subtab active" data-target="attendance">감정 출석부</button>
     <button class="subtab"       data-target="diary">일기 쓰기</button>
   </div>
 
   <div class="subcontent">
-    <!-- 2) 감정 출석부 서브섹션 -->
+    <!-- 감정 출석부 -->
     <div id="attendance" class="subsection active">
       <h3>감정 출석부 – <span id="attDate"></span></h3>
       <div class="emotion-grid"></div>
-
       <div id="attReason" class="attendance-reason" style="display:none;">
         <input id="reasonInput"
-               type="text"
-               maxlength="20"
+               type="text" maxlength="20"
                placeholder="20자 이내로 이유를 작성하세요"
                style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
         <button id="checkBtn"
@@ -192,85 +190,104 @@
       </div>
     </div>
 
-    <!-- 3) 일기 쓰기 서브섹션 (추후 구현) -->
+    <!-- 일기 쓰기 -->
     <div id="diary" class="subsection">
-      <h3>일기 쓰기</h3>
-      <p>준비 중…</p>
+      <div class="diary-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3>일기 쓰기</h3>
+        <button id="newDiaryBtn"
+                style="padding:0.5rem 1rem; background:#64b5f6; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+          새 일기 쓰기
+        </button>
+      </div>
+
+      <!-- 1) 일기 목록 -->
+      <div id="diaryList" class="diary-list">
+        <!-- JS로 채워집니다 -->
+      </div>
+
+      <!-- 2) 새 일기 쓰기 폼 -->
+      <div id="diaryForm" class="diary-form" style="display:none; max-width:500px;">
+        <input id="diaryDate" type="date" style="margin-bottom:0.5rem; padding:0.5rem;" />
+        <select id="diaryEmotion" style="width:100%; margin-bottom:0.5rem; padding:0.5rem;"></select>
+        <textarea id="diaryText"
+                  rows="6"
+                  placeholder="오늘의 일기를 작성하세요"
+                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
+        <button id="saveDiaryBtn"
+                style="padding:0.6em 1.2em; background:#64b5f6; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+          저장
+        </button>
+      </div>
+
+      <!-- 3) 일기 보기 -->
+      <div id="diaryView" class="diary-view" style="display:none; max-width:500px;">
+        <button id="backDiaryBtn"
+                style="margin-bottom:1rem; padding:0.4rem 0.8rem; background:#aaa; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+          목록으로
+        </button>
+        <h4>날짜: <span id="viewDate"></span></h4>
+        <p>감정: <span id="viewEmotion"></span></p>
+        <h5>📝 원본</h5><p id="viewOriginal"></p>
+        <h5>💡 AI 제안</h5><p id="viewAI">없음</p>
+        <h5>✅ 최종</h5><p id="viewFinal">없음</p>
+      </div>
     </div>
   </div>
 </div>
+<!-- ====== 비밀 친구 섹션 끝 ====== -->
 
 <style>
   .subtabs {
-    display: flex;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 1rem;
+    display: flex; border-bottom:2px solid #ddd; margin-bottom:1rem;
   }
-  .subtabs .subtab {
-    flex: 1;
-    padding: 0.75rem;
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    font-size: 1rem;
-    cursor: pointer;
+  .subtab {
+    flex:1; padding:0.75rem; background:none; border:none;
+    border-bottom:3px solid transparent; font-size:1rem; cursor:pointer;
   }
-  .subtabs .subtab.active {
-    border-color: #64b5f6;
-    color: #64b5f6;
+  .subtab.active {
+    border-color:#64b5f6; color:#64b5f6;
   }
-  .subcontent .subsection {
-    display: none;
-  }
-  .subcontent .subsection.active {
-    display: block;
-  }
+  .subcontent .subsection { display:none; }
+  .subcontent .subsection.active { display:block; }
 
   .emotion-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 0.75rem;
+    display:grid; grid-template-columns:repeat(5,1fr); gap:0.75rem; margin-bottom:1rem;
   }
   .emotion-cell {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    display:flex; flex-direction:column; align-items:center;
+    padding:0.75rem; border:1px solid #ccc; border-radius:8px; cursor:pointer;
+    transition:background .2s, border-color .2s;
   }
   .emotion-cell.selected {
-    background: rgba(100,181,246,0.2);
-    border-color: #64b5f6;
+    background:rgba(100,181,246,0.2); border-color:#64b5f6;
   }
-  .emotion-cell .emo-emoji {
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-  }
-  .attendance-reason {
-    margin-top: 1rem;
+
+  .diary-list button {
+    display:block; width:100%; text-align:left; padding:0.5rem; margin-bottom:0.25rem;
+    border:1px solid #ccc; background:#fff; cursor:pointer; border-radius:4px;
   }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // 날짜 표시
+  const studentId = localStorage.getItem('studentId');
+  if (!studentId) return location.href='index.html';
+
+  // 날짜
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('attDate').innerText = today;
 
   // 탭 전환
-  document.querySelectorAll('.subtab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.subtab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.subtab').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll('.subsection').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.subsection').forEach(sec=>sec.classList.remove('active'));
       document.getElementById(btn.dataset.target).classList.add('active');
     });
   });
 
-  // 감정 목록 (25개)
+  // 감정 리스트
   const emotions = [
     {emoji:'😀',label:'기쁨'},{emoji:'😄',label:'행복'},{emoji:'😍',label:'사랑'},
     {emoji:'😌',label:'차분'},{emoji:'😂',label:'재미'},{emoji:'🤩',label:'설렘'},
@@ -279,10 +296,11 @@ document.addEventListener('DOMContentLoaded', () => {
     {emoji:'😡',label:'화남'},{emoji:'😱',label:'공포'},{emoji:'😴',label:'피곤'},
     {emoji:'🤔',label:'고민'},{emoji:'😕',label:'혼란'},{emoji:'😏',label:'자신감'},
     {emoji:'😔',label:'우울'},{emoji:'😓',label:'스트레스'},{emoji:'😇',label:'안도'},
-    {emoji:'🤗',label:'친근'},{emoji:'🤒',label:'몸이 아픔'},{emoji:'😶',label:'무감각'},
+    {emoji:'🤗',label:'친근'},{emoji:'🤒',label:'아픔'},{emoji:'😶',label:'무감각'},
     {emoji:'🙃',label:'장난'},{emoji:'🙏',label:'감사'}
   ];
 
+  // 1) 감정 출석부 셋업
   const grid = document.querySelector('.emotion-grid');
   emotions.forEach(({emoji,label}) => {
     const cell = document.createElement('div');
@@ -292,8 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
     cell.addEventListener('click', () => {
       document.querySelectorAll('.emotion-cell').forEach(c=>c.classList.remove('selected'));
       cell.classList.add('selected');
-      document.getElementById('attReason').style.display = 'block';
-      document.getElementById('attReason').scrollIntoView({ behavior:'smooth' });
+      document.getElementById('attReason').style.display='block';
+      document.getElementById('attReason').scrollIntoView({behavior:'smooth'});
+      // 기본 감정 저장 so diary에서 기본 선택
+      localStorage.setItem(
+        `attendance_${studentId}_${today}`,
+        JSON.stringify({emoji,label})
+      );
     });
   });
 
@@ -303,21 +326,102 @@ document.addEventListener('DOMContentLoaded', () => {
     const reason = document.getElementById('reasonInput').value.trim();
     if (!sel) return alert('감정을 선택하세요.');
     if (!reason) return alert('이유를 작성하세요.');
-    // localStorage 저장 예시
-    const key = `attendance_${localStorage.getItem('studentId')}_${today}`;
-    localStorage.setItem(key, JSON.stringify({
-      emoji: sel.querySelector('.emo-emoji').innerText,
-      label: sel.innerText.replace(sel.querySelector('.emo-emoji').innerText,''),
-      reason
-    }));
+    const key = `attendance_${studentId}_${today}`;
+    const base = JSON.parse(localStorage.getItem(key));
+    localStorage.setItem(key, JSON.stringify({...base,reason}));
     alert('출석 체크 완료!');
-    // 리셋
     sel.classList.remove('selected');
-    document.getElementById('reasonInput').value = '';
-    document.getElementById('attReason').style.display = 'none';
+    document.getElementById('reasonInput').value='';
+    document.getElementById('attReason').style.display='none';
+    loadDiaryList();
   });
+
+  // 2) 일기 탭 셋업
+  const diaryList   = document.getElementById('diaryList');
+  const diaryForm   = document.getElementById('diaryForm');
+  const diaryView   = document.getElementById('diaryView');
+  const newBtn      = document.getElementById('newDiaryBtn');
+  const formDate    = document.getElementById('diaryDate');
+  const formEmo     = document.getElementById('diaryEmotion');
+  const formText    = document.getElementById('diaryText');
+  const saveDiary   = document.getElementById('saveDiaryBtn');
+  const backDiary   = document.getElementById('backDiaryBtn');
+
+  // 감정 select 옵션 생성
+  emotions.forEach(({emoji,label}) => {
+    const o = document.createElement('option');
+    o.value = label;
+    o.innerText = `${emoji} ${label}`;
+    formEmo.appendChild(o);
+  });
+
+  function loadDiaryList() {
+    diaryList.innerHTML='';
+    // localStorage에서 diary_${studentId}_ 로 시작하는 키 찾기
+    const keys = [];
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(k.startsWith(`diary_${studentId}_`)) keys.push(k);
+    }
+    keys.sort().reverse().forEach(k => {
+      const {date,emotion,text} = JSON.parse(localStorage.getItem(k));
+      const btn = document.createElement('button');
+      btn.innerText = `${date} – ${text.slice(0,8)}...`;
+      btn.addEventListener('click', ()=>viewEntry(k));
+      diaryList.appendChild(btn);
+    });
+  }
+
+  function viewEntry(key) {
+    const data = JSON.parse(localStorage.getItem(key));
+    diaryList.style.display='none';
+    diaryForm.style.display='none';
+    diaryView.style.display='block';
+    document.getElementById('viewDate').innerText = data.date;
+    document.getElementById('viewEmotion').innerText = data.emotion;
+    document.getElementById('viewOriginal').innerText = data.text;
+    document.getElementById('viewAI').innerText = data.aiSuggestion||'없음';
+    document.getElementById('viewFinal').innerText = data.finalContent||'없음';
+  }
+
+  newBtn.addEventListener('click', () => {
+    diaryList.style.display='none';
+    diaryView.style.display='none';
+    diaryForm.style.display='block';
+    formDate.value = today;
+    // 기본 감정: 오늘 출석 체크 감정
+    const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${today}`)||'{}');
+    formEmo.value = att.label || '';
+    formText.value = '';
+  });
+
+  saveDiary.addEventListener('click', () => {
+    const date = formDate.value;
+    const emotion = formEmo.value;
+    const text = formText.value.trim();
+    if(!date||!emotion||!text) return alert('모든 항목을 입력하세요.');
+    const timestamp = Date.now();
+    const key = `diary_${studentId}_${date}_${timestamp}`;
+    localStorage.setItem(key, JSON.stringify({
+      date, emotion, text, aiSuggestion:'', finalContent:''
+    }));
+    alert('일기 저장 완료!');
+    diaryForm.style.display='none';
+    loadDiaryList();
+    diaryList.style.display='block';
+  });
+
+  backDiary.addEventListener('click', () => {
+    diaryView.style.display='none';
+    diaryForm.style.display='none';
+    diaryList.style.display='block';
+  });
+
+  // 초기 로드
+  loadDiaryList();
 });
 </script>
+
 
 
     <div id="learning" class="section">
