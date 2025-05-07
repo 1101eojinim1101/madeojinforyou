@@ -65,23 +65,8 @@
 <div id="info" class="section active">
   <h2>나의 정보</h2>
 
-  <!-- 1) 엑셀 명단 업로드 -->
-  <label for="excelFile" style="font-weight:600;">학생 명단 업로드 (이름, 학번)</label><br/>
-  <input type="file" id="excelFile" accept=".xlsx,.xls" style="margin-bottom:1rem;" />
-
-  <table id="studentTable" style="width:100%; border-collapse:collapse;">
-    <thead>
-      <tr style="background:#e1f5fe;">
-        <th style="padding:0.5rem; border:1px solid #ccc;">이름</th>
-        <th style="padding:0.5rem; border:1px solid #ccc;">학번</th>
-        <th style="padding:0.5rem; border:1px solid #ccc;">내 정보 보기</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <!-- 2) 선택된 학생 정보 폼 -->
-  <div id="infoForm" style="display:none; margin-top:2rem; max-width:400px;">
+  <!-- 선택 UI 제거하고, 로그인한 학생 정보만 바로 보여줌 -->
+  <div id="infoForm" style="margin-top:2rem; max-width:400px;">
     <h3><span id="selectedName"></span>님의 정보</h3>
     <!-- 프로필 사진 업로드 & 미리보기 -->
     <div class="photo-container">
@@ -106,6 +91,55 @@
   </div>
 </div>
 <!-- ====== 나의 정보 섹션 끝 ====== -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1) 로그인된 학생 ID 가져오기
+    const studentId = localStorage.getItem('studentId');
+    if (!studentId) {
+      // 비로그인 시 대시보드 차단
+      return location.href = 'index.html';
+    }
+    // 2) 이름(아이디) 표시 & 폼 보이기
+    document.getElementById('selectedName').innerText = studentId;
+    document.getElementById('infoForm').style.display = 'block';
+    // 3) 기존 저장값 로드
+    const data = JSON.parse(localStorage.getItem('info_' + studentId) || '{}');
+    if (data.photo) document.getElementById('profilePreview').src = data.photo;
+    ['birthday','mbti','account','accountPw','hobby','interest','skill','dream'].forEach(key => {
+      document.getElementById(key).value = data[key] || '';
+    });
+  });
+
+  // 사진 업로드 & 미리보기
+  document.getElementById('photoUpload').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => document.getElementById('profilePreview').src = ev.target.result;
+    reader.readAsDataURL(file);
+  });
+
+  // 저장하기
+  document.getElementById('saveInfo').addEventListener('click', () => {
+    const studentId = localStorage.getItem('studentId');
+    if (!studentId) return alert('로그인 후 이용하세요.');
+    const obj = {
+      photo: document.getElementById('profilePreview').src,
+      birthday: document.getElementById('birthday').value,
+      mbti: document.getElementById('mbti').value,
+      account: document.getElementById('account').value,
+      accountPw: document.getElementById('accountPw').value,
+      hobby: document.getElementById('hobby').value,
+      interest: document.getElementById('interest').value,
+      skill: document.getElementById('skill').value,
+      dream: document.getElementById('dream').value,
+    };
+    localStorage.setItem('info_' + studentId, JSON.stringify(obj));
+    alert('나의 정보가 저장되었습니다.');
+  });
+</script>
+
 
 <style>
   /* 사진 미리보기용 컨테이너 */
