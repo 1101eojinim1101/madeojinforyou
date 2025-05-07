@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Madeojin For You</title>
+  <title>학생 로그인</title>
   <style>
     html, body {
       height: 100%;
@@ -12,19 +12,32 @@
       align-items: center;
       font-family: sans-serif;
     }
-    .btn {
-      display: inline-block;
-      padding: 0.6em 1.2em;
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      width: 280px;
+    }
+    .login-form input,
+    .login-form button {
+      margin-bottom: 12px;
+      padding: 8px;
       font-size: 1rem;
-      text-decoration: none;
-      color: #fff;
-      background-color: #007BFF;
-      border-radius: 4px;
+    }
+    .login-form button {
       cursor: pointer;
     }
+    #msg { color: red; height: 1.2em; }
   </style>
 </head>
 <body>
-  <a href="login.html" class="btn">로그인 페이지로 가기</a>
+  <div class="login-form">
+    <h1>로그인</h1>
+    <input id="username" type="text" placeholder="ID" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="btnLogin">로그인</button>
+    <p id="msg"></p>
+  </div>
+
+  <script src="static/login.js" defer></script>
 </body>
 </html>
