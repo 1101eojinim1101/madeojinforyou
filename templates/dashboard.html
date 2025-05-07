@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>학생 대시보드</title>
+</head>
+<body>
+  <h1>대시보드</h1>
+  <p>환영합니다, <span id="user"></span>님!</p>
+  <button id="btnLogout">로그아웃</button>
+
+  <script>
+  // 로그인 여부 확인
+  const user = localStorage.getItem('studentId');
+  if (!user) {
+    location.href = 'login.html';
+  } else {
+    document.getElementById('user').innerText = user;
+  }
+
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('studentId');
+    location.href = 'login.html';
+  });
+  </script>
+</body>
+</html>
