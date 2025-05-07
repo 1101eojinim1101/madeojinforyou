@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Madeojin For You</title>
-  <!-- 외부 CSS가 필요하다면 유지 -->
-  <link rel="stylesheet" href="static/css/style.css">
   <style>
-    /* 화면 전체를 flex 컨테이너로 만들어 버튼을 중앙에 배치 */
     html, body {
       height: 100%;
       margin: 0;
@@ -15,17 +12,19 @@
       align-items: center;
       font-family: sans-serif;
     }
-    /* 버튼 스타일 */
-    #magicBtn {
+    .btn {
+      display: inline-block;
       padding: 0.6em 1.2em;
       font-size: 1rem;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007BFF;
+      border-radius: 4px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  -  <button id="magicBtn">Click me</button>
-  +  <!-- 로그인 폼으로 넘어갑니다 -->
-  +  <a href="login.html">로그인 페이지로 가기</a>
-  </body>  
+  <a href="login.html" class="btn">로그인 페이지로 가기</a>
+</body>
 </html>
