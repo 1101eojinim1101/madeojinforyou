@@ -60,109 +60,166 @@
   </nav>
 
   <!-- 우측 콘텐츠 -->
-   <!-- ====== 나의 정보 섹션 시작 ====== -->
-<div id="info" class="section active">
-  <h2>나의 정보</h2>
-
-  <div id="infoForm" style="margin-top:2rem; max-width:400px;">
-    <h3><span id="selectedName"></span>님의 정보</h3>
-
-    <!-- 프로필 사진 업로드 & 미리보기 -->
-    <div class="photo-container">
-      <img id="profilePreview" alt="프로필 사진 미리보기" />
-      <label for="photoUpload" class="photo-label">프로필 사진 선택</label>
-      <input type="file" id="photoUpload" accept="image/png, image/jpeg" style="display:none" />
-    </div>
-
-    <!-- 정보 입력란 -->
-    <input id="birthday"  type="date"     style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="mbti"      type="text"     placeholder="MBTI"                  style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="account"   type="text"     placeholder="수학탐험대 계정"        style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="accountPw" type="text"     placeholder="수학탐험대 비밀번호"    style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="hobby"     type="text"     placeholder="취미"                  style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="interest"  type="text"     placeholder="흥미"                  style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="skill"     type="text"     placeholder="특기"                  style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-    <input id="dream"     type="text"     placeholder="장래희망"              style="width:100%; margin-bottom:1rem; padding:0.5rem;" />
-
-    <button id="saveInfo" style="width:100%; padding:0.75rem; background:#64b5f6; color:#fff; border:none; border-radius:6px; cursor:pointer;">
-      저장하기
-    </button>
-  </div>
-</div>
-<!-- ====== 나의 정보 섹션 끝 ====== -->
-
-<style>
-  /* 프로필 사진 컨테이너 */
-  .photo-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 1rem;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-  }
-  .photo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .photo-label {
-    display: block;
-    text-align: center;
-    margin-top: 0.5rem;
-    color: #007bff;
-    cursor: pointer;
-  }
-</style>
-
-<script>
-  // 페이지 로드 시 로그인 확인 및 정보 로드
-  document.addEventListener('DOMContentLoaded', () => {
-    const studentId = localStorage.getItem('studentId');
-    if (!studentId) return location.href = 'index.html';
-
-    document.getElementById('selectedName').innerText = studentId;
-    document.getElementById('infoForm').style.display = 'block';
-
-    const data = JSON.parse(localStorage.getItem('info_' + studentId) || '{}');
-    if (data.photo) document.getElementById('profilePreview').src = data.photo;
-    ['birthday','mbti','account','accountPw','hobby','interest','skill','dream'].forEach(key => {
-      if (data[key]) document.getElementById(key).value = data[key];
-    });
-  });
-
-  // 사진 업로드 & 미리보기
-  document.getElementById('photoUpload').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => document.getElementById('profilePreview').src = ev.target.result;
-    reader.readAsDataURL(file);
-  });
-
-  // 정보 저장하기
-  document.getElementById('saveInfo').addEventListener('click', () => {
-    const studentId = localStorage.getItem('studentId');
-    if (!studentId) return alert('로그인 후 이용하세요.');
-
-    const obj = {
-      photo: document.getElementById('profilePreview').src,
-      birthday: document.getElementById('birthday').value,
-      mbti: document.getElementById('mbti').value,
-      account: document.getElementById('account').value,
-      accountPw: document.getElementById('accountPw').value,
-      hobby: document.getElementById('hobby').value,
-      interest: document.getElementById('interest').value,
-      skill: document.getElementById('skill').value,
-      dream: document.getElementById('dream').value,
-    };
-    localStorage.setItem('info_' + studentId, JSON.stringify(obj));
-    alert('나의 정보가 저장되었습니다.');
-  });
+  <div class="content">
+    <!-- ====== 나의 정보 섹션 시작 ====== -->
+    <div id="info" class="section active">
+      <h2>나의 정보</h2>
   
-</script><div class="content">
+      <div id="infoForm">
+        <h3><span id="selectedName"></span>님의 정보</h3>
+  
+        <!-- 프로필 사진 업로드 & 미리보기 -->
+        <div class="photo-container">
+          <img id="profilePreview" alt="프로필 사진 미리보기" />
+          <label for="photoUpload" class="photo-label">프로필 사진 선택</label>
+          <input type="file" id="photoUpload" accept="image/png, image/jpeg" style="display:none" />
+        </div>
+  
+        <!-- 정보 입력란 -->
+        <input id="birthday"  type="date"    placeholder="생일"                  />
+        <input id="mbti"      type="text"    placeholder="MBTI"                  />
+        <input id="hobby"     type="text"    placeholder="취미"                  />
+        <input id="interest"  type="text"    placeholder="흥미"                  />
+        <input id="skill"     type="text"    placeholder="특기"                  />
+        <input id="dream"     type="text"    placeholder="장래희망"              />
+        <input id="account"   type="text"    placeholder="수학탐험대 계정"        />
+        <input id="accountPw" type="text"    placeholder="수학탐험대 비밀번호"    />
+  
+        <button id="saveInfo">저장하기</button>
+      </div>
+    </div>
+    <!-- ====== 나의 정보 섹션 끝 ====== -->
+  </div>
+  
+  <style>
+    /* .content가 화면 전체를 감싸서 중앙 정렬 */
+    .content {
+      display: flex;
+      justify-content: center;   /* 가로 중앙 */
+      align-items: center;       /* 세로 중앙 */
+      min-height: 100vh;         /* 뷰포트 전체 높이 */
+      padding: 1rem;             /* 좁은 화면에서도 여유 있게 */
+      box-sizing: border-box;
+      background: #f9f9f9;       /* 원하시면 배경색 추가 가능 */
+    }
+  
+    /* 내부 폼 고정 너비 및 세로 정렬 */
+    #info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    #infoForm {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 360px;
+    }
+  
+    #infoForm h3 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  
+    /* 사진 컨테이너는 기존대로 */
+    .photo-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+    }
+    .photo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-label {
+      display: block;
+      text-align: center;
+      margin-top: 0.5rem;
+      color: #007bff;
+      cursor: pointer;
+    }
+  
+    /* 입력란과 버튼 공통 스타일 */
+    #infoForm input,
+    #infoForm button {
+      margin-bottom: 0.75rem;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    #infoForm button {
+      background: #64b5f6;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    #infoForm button:hover {
+      background: #4a90e2;
+    }
+  </style>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const studentId = localStorage.getItem('studentId');
+      if (!studentId) {
+        location.href = 'index.html';
+        return;
+      }
+  
+      document.getElementById('selectedName').innerText = studentId;
+      document.getElementById('infoForm').style.display = 'flex';
+  
+      // 기존 저장값 로드
+      const data = JSON.parse(localStorage.getItem('info_' + studentId) || '{}');
+      if (data.photo) {
+        document.getElementById('profilePreview').src = data.photo;
+      }
+      ['birthday','mbti','account','accountPw','hobby','interest','skill','dream'].forEach(key => {
+        if (data[key]) document.getElementById(key).value = data[key];
+      });
+    });
+  
+    // 사진 업로드 & 미리보기
+    document.getElementById('photoUpload').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => document.getElementById('profilePreview').src = ev.target.result;
+      reader.readAsDataURL(file);
+    });
+  
+    // 정보 저장하기
+    document.getElementById('saveInfo').addEventListener('click', () => {
+      const studentId = localStorage.getItem('studentId');
+      if (!studentId) {
+        alert('로그인 후 이용하세요.');
+        return;
+      }
+      const obj = {
+        photo:      document.getElementById('profilePreview').src,
+        birthday:   document.getElementById('birthday').value,
+        mbti:       document.getElementById('mbti').value,
+        account:    document.getElementById('account').value,
+        accountPw:  document.getElementById('accountPw').value,
+        hobby:      document.getElementById('hobby').value,
+        interest:   document.getElementById('interest').value,
+        skill:      document.getElementById('skill').value,
+        dream:      document.getElementById('dream').value,
+      };
+      localStorage.setItem('info_' + studentId, JSON.stringify(obj));
+      alert('나의 정보가 저장되었습니다.');
+    });
+  </script>
+  
 
   <div class="content">
     <!-- ====== 비밀 친구 섹션 시작 ====== -->
