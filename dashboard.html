@@ -61,17 +61,20 @@
 
   <!-- 우측 콘텐츠 -->
   <div class="content">
-    <!-- ====== 나의 정보 섹션 시작 ====== -->
+<!-- ====== 나의 정보 섹션 시작 ====== -->
 <div id="info" class="section active">
   <h2>나의 정보</h2>
-  <!-- 1) 엑셀 업로드 -->
-  <input type="file" id="excelFile" accept=".xlsx,.xls" />
-  <table id="studentTable" style="width:100%; margin-top:1rem; border-collapse:collapse;">
+
+  <!-- 1) 엑셀 명단 업로드 -->
+  <label for="excelFile" style="font-weight:600;">학생 명단 업로드 (이름, 학번)</label><br/>
+  <input type="file" id="excelFile" accept=".xlsx,.xls" style="margin-bottom:1rem;" />
+
+  <table id="studentTable" style="width:100%; border-collapse:collapse;">
     <thead>
       <tr style="background:#e1f5fe;">
         <th style="padding:0.5rem; border:1px solid #ccc;">이름</th>
         <th style="padding:0.5rem; border:1px solid #ccc;">학번</th>
-        <th style="padding:0.5rem; border:1px solid #ccc;">선택</th>
+        <th style="padding:0.5rem; border:1px solid #ccc;">내 정보 보기</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -80,17 +83,22 @@
   <!-- 2) 선택된 학생 정보 폼 -->
   <div id="infoForm" style="display:none; margin-top:2rem; max-width:400px;">
     <h3><span id="selectedName"></span>님의 정보</h3>
-    <img id="profilePreview" alt="프로필 사진" style="width:120px; height:120px; border-radius:50%; object-fit:cover; background:#f0f0f0;" />
-    <input type="file" id="photoUpload" accept="image/*" style="display:block; margin:0.5rem 0;" />
+    <!-- 프로필 사진 업로드 & 미리보기 -->
+    <div class="photo-container">
+      <img id="profilePreview" alt="프로필 사진 미리보기" />
+      <label for="photoUpload" class="photo-label">프로필 사진 선택</label>
+      <input type="file" id="photoUpload" accept="image/png, image/jpeg" style="display:none" />
+    </div>
 
-    <input id="birthday" type="date"     placeholder="생일"                 style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="mbti"     type="text"     placeholder="MBTI"                style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="account"  type="text"     placeholder="수학탐험대 계정"        style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="accountPw"type="text"     placeholder="수학탐험대 비밀번호"    style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="hobby"    type="text"     placeholder="취미"                style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="interest" type="text"     placeholder="흥미"                style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="skill"    type="text"     placeholder="특기"                style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
-    <input id="dream"    type="text"     placeholder="장래희망"            style="width:100%; padding:0.5rem; margin-bottom:1rem;" />
+    <!-- 나머지 정보 입력란 -->
+    <input id="birthday"  type="date" placeholder="생일"                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="mbti"      type="text" placeholder="MBTI"                 style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="account"   type="text" placeholder="수학탐험대 계정"         style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="accountPw" type="text" placeholder="수학탐험대 비밀번호"     style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="hobby"     type="text" placeholder="취미"                 style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="interest"  type="text" placeholder="흥미"                 style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="skill"     type="text" placeholder="특기"                 style="width:100%; padding:0.5rem; margin-bottom:0.5rem;" />
+    <input id="dream"     type="text" placeholder="장래희망"             style="width:100%; padding:0.5rem; margin-bottom:1rem;" />
 
     <button id="saveInfo" style="padding:0.75rem 1.5rem; background:#64b5f6; color:#fff; border:none; border-radius:6px; cursor:pointer;">
       저장하기
@@ -98,6 +106,103 @@
   </div>
 </div>
 <!-- ====== 나의 정보 섹션 끝 ====== -->
+
+<style>
+  /* 사진 미리보기용 컨테이너 */
+  .photo-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+  }
+  .photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo-label {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #007bff;
+    cursor: pointer;
+  }
+</style>
+
+<!-- SheetJS for Excel 파싱 -->
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script>
+  let selectedId = null;
+
+  document.getElementById('excelFile').addEventListener('change', async e => {
+    const [file] = e.target.files;
+    if (!file) return;
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, { type: 'array' });
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+    const tbody = document.querySelector('#studentTable tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="padding:0.5rem; border:1px solid #ccc;">${r.이름||''}</td>
+        <td style="padding:0.5rem; border:1px solid #ccc;">${r.학번||''}</td>
+        <td style="padding:0.5rem; border:1px solid #ccc;">
+          <button class="selectBtn" style="padding:0.3rem 0.6rem;">내 정보 보기</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+    document.querySelectorAll('.selectBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tr = btn.closest('tr');
+        const name = tr.children[0].innerText;
+        const id   = tr.children[1].innerText;
+        selectedId = id;
+        document.getElementById('selectedName').innerText = name;
+        loadInfo(id);
+        document.getElementById('infoForm').style.display = 'block';
+      });
+    });
+  });
+
+  function loadInfo(id) {
+    const data = JSON.parse(localStorage.getItem('info_' + id) || '{}');
+    if (data.photo) document.getElementById('profilePreview').src = data.photo;
+    ['birthday','mbti','account','accountPw','hobby','interest','skill','dream'].forEach(key => {
+      document.getElementById(key).value = data[key] || '';
+    });
+  }
+
+  document.getElementById('photoUpload').addEventListener('change', e => {
+    const [file] = e.target.files;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => document.getElementById('profilePreview').src = ev.target.result;
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('saveInfo').addEventListener('click', () => {
+    if (!selectedId) return alert('학생을 먼저 선택하세요.');
+    const obj = {
+      photo: document.getElementById('profilePreview').src,
+      birthday: document.getElementById('birthday').value,
+      mbti: document.getElementById('mbti').value,
+      account: document.getElementById('account').value,
+      accountPw: document.getElementById('accountPw').value,
+      hobby: document.getElementById('hobby').value,
+      interest: document.getElementById('interest').value,
+      skill: document.getElementById('skill').value,
+      dream: document.getElementById('dream').value,
+    };
+    localStorage.setItem('info_' + selectedId, JSON.stringify(obj));
+    alert('나의 정보가 저장되었습니다.');
+  });
+</script>
+
 
 <!-- SheetJS for Excel 파싱 -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
