@@ -176,10 +176,14 @@
   <div class="subcontent">
     <!-- 감정 출석부 -->
     <div id="attendance" class="subsection active">
-      <h3>감정 출석부 – <span id="attDate"></span></h3>
+      <h3>
+        감정 출석부 –
+        <input type="date" id="attDateInput"
+               style="margin-left:0.5rem; padding:0.3rem;"/>
+      </h3>
       <div class="emotion-grid"></div>
 
-      <div id="attReason" class="attendance-reason" style="display:none;">
+      <div id="attReason" class="attendance-reason" style="display:none; margin-top:1rem;">
         <input id="reasonInput"
                type="text" maxlength="20"
                placeholder="네 마음의 이유가 궁금해. 나에게만 알려줘🤫"
@@ -228,8 +232,9 @@
         <select id="diaryEmotion"
                 style="width:100%; margin-bottom:0.5rem; padding:0.5rem;">
         </select>
-        <textarea id="diaryText" rows="6"
-                  placeholder="네 마음과 경험을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게. 조용히 듣고있다가, 네가 원할 때 필요한 조언을 해줄게."
+        <textarea id="diaryText"
+                  rows="6"
+                  placeholder="너의 감정과 경험을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게."
                   style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
         <button id="saveDiaryBtn"
                 style="padding:0.6em 1.2em;
@@ -277,21 +282,23 @@
   .subcontent .subsection.active { display:block; }
 
   .emotion-grid {
-    display:grid; grid-template-columns:repeat(5,1fr); gap:0.75rem; margin-bottom:1rem;
+    display:grid; grid-template-columns:repeat(5,1fr);
+    gap:0.75rem; margin-bottom:1rem;
   }
   .emotion-cell {
     display:flex; flex-direction:column; align-items:center;
-    padding:0.75rem; border:1px solid #ccc; border-radius:8px; cursor:pointer;
-    transition:background .2s, border-color .2s;
+    padding:0.75rem; border:1px solid #ccc; border-radius:8px;
+    cursor:pointer; transition:background .2s, border-color .2s;
   }
   .emotion-cell.selected {
     background:rgba(100,181,246,0.2); border-color:#64b5f6;
   }
-
   .diary-list button {
-    display:block; width:100%; text-align:left; padding:0.5rem; margin-bottom:0.25rem;
-    border:1px solid #ccc; background:#fff; cursor:pointer; border-radius:4px;
+    display:block; width:100%; text-align:left; padding:0.5rem;
+    margin-bottom:0.25rem; border:1px solid #ccc; background:#fff;
+    cursor:pointer; border-radius:4px;
   }
+  .attendance-reason input { font-size:1rem; }
 </style>
 
 <script>
@@ -299,9 +306,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const studentId = localStorage.getItem('studentId');
   if (!studentId) return location.href='index.html';
 
-  // 오늘 날짜
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('attDate').innerText = today;
+  // 날짜 입력
+  const dateInput = document.getElementById('attDateInput');
+  dateInput.value = new Date().toISOString().split('T')[0];
+  dateInput.addEventListener('change', loadAttendance);
 
   // 탭 전환
   document.querySelectorAll('.subtab').forEach(btn => {
@@ -342,7 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
         li.innerText = `${date} – ${emoji} ${label} – ${reason}`;
         list.appendChild(li);
       });
-    // TODO: 서버 연동 가능 지점
   }
 
   // 감정 그리드 생성
@@ -357,8 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
       cell.classList.add('selected');
       document.getElementById('attReason').style.display = 'block';
       document.getElementById('attReason').scrollIntoView({ behavior:'smooth' });
-      // 기본 감정 저장
-      const key = `attendance_${studentId}_${today}`;
+      // 감정 저장
+      const key = `attendance_${studentId}_${dateInput.value}`;
       localStorage.setItem(key, JSON.stringify({ emoji, label }));
     });
   });
@@ -369,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const reason = document.getElementById('reasonInput').value.trim();
     if (!sel) return alert('감정을 선택하세요.');
     if (!reason) return alert('이유를 작성하세요.');
-    const key = `attendance_${studentId}_${today}`;
+    const key = `attendance_${studentId}_${dateInput.value}`;
     const base = JSON.parse(localStorage.getItem(key));
     localStorage.setItem(key, JSON.stringify({ ...base, reason }));
     alert('출석 체크 완료!');
@@ -429,8 +436,8 @@ document.addEventListener('DOMContentLoaded', () => {
     diaryList.style.display = 'none';
     diaryView.style.display = 'none';
     diaryForm.style.display = 'block';
-    formDate.value = today;
-    const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${today}`) || '{}');
+    formDate.value = dateInput.value;
+    const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${dateInput.value}`) || '{}');
     formEmo.value = att.label || '';
     formText.value = '';
   });
