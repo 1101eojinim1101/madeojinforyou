@@ -4,29 +4,62 @@
   <meta charset="UTF-8">
   <title>학생 로그인</title>
   <style>
+    /* 화면 전체 배경 그라디언트 */
     html, body {
       height: 100%;
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
+
+    /* 로그인 카드 스타일 */
     .login-form {
-      display: flex;
-      flex-direction: column;
-      width: 280px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      text-align: center;
     }
-    .login-form input,
-    .login-form button {
-      margin-bottom: 12px;
-      padding: 8px;
+
+    .login-form h1 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
       font-size: 1rem;
     }
+
     .login-form button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #5563de;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
     }
-    #msg { color: red; height: 1.2em; }
+
+    .login-form button:hover {
+      background-color: #4353c7;
+    }
+
+    #msg {
+      height: 1.2em;
+      margin-top: 0.5rem;
+      color: crimson;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -38,6 +71,7 @@
     <p id="msg"></p>
   </div>
 
+  <!-- 로그인 로직 스크립트 -->
   <script src="static/login.js" defer></script>
 </body>
 </html>
