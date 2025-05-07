@@ -164,10 +164,162 @@
 </script>
 
   <div class="content">
-    <div id="secret" class="section">
-      <h2>비밀 친구</h2>
-      <p>여기에 비밀 친구 관련 내용을 표시합니다.</p>
+
+<!-- ====== 비밀 친구 섹션 (secret) ====== -->
+<div id="secret" class="section">
+  <!-- 1) 최상단 서브탭 -->
+  <div class="subtabs">
+    <button class="subtab active" data-target="attendance">감정 출석부</button>
+    <button class="subtab"       data-target="diary">일기 쓰기</button>
+  </div>
+
+  <div class="subcontent">
+    <!-- 2) 감정 출석부 서브섹션 -->
+    <div id="attendance" class="subsection active">
+      <h3>감정 출석부 – <span id="attDate"></span></h3>
+      <div class="emotion-grid"></div>
+
+      <div id="attReason" class="attendance-reason" style="display:none;">
+        <input id="reasonInput"
+               type="text"
+               maxlength="20"
+               placeholder="20자 이내로 이유를 작성하세요"
+               style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
+        <button id="checkBtn"
+                style="padding:0.6em 1.2em; background:#64b5f6; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+          출석 체크
+        </button>
+      </div>
     </div>
+
+    <!-- 3) 일기 쓰기 서브섹션 (추후 구현) -->
+    <div id="diary" class="subsection">
+      <h3>일기 쓰기</h3>
+      <p>준비 중…</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .subtabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 1rem;
+  }
+  .subtabs .subtab {
+    flex: 1;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .subtabs .subtab.active {
+    border-color: #64b5f6;
+    color: #64b5f6;
+  }
+  .subcontent .subsection {
+    display: none;
+  }
+  .subcontent .subsection.active {
+    display: block;
+  }
+
+  .emotion-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0.75rem;
+  }
+  .emotion-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .emotion-cell.selected {
+    background: rgba(100,181,246,0.2);
+    border-color: #64b5f6;
+  }
+  .emotion-cell .emo-emoji {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .attendance-reason {
+    margin-top: 1rem;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 날짜 표시
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('attDate').innerText = today;
+
+  // 탭 전환
+  document.querySelectorAll('.subtab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.subtab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.subsection').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(btn.dataset.target).classList.add('active');
+    });
+  });
+
+  // 감정 목록 (25개)
+  const emotions = [
+    {emoji:'😀',label:'기쁨'},{emoji:'😄',label:'행복'},{emoji:'😍',label:'사랑'},
+    {emoji:'😌',label:'차분'},{emoji:'😂',label:'재미'},{emoji:'🤩',label:'설렘'},
+    {emoji:'😊',label:'만족'},{emoji:'😉',label:'장난'},{emoji:'😜',label:'유쾌'},
+    {emoji:'😐',label:'평범'},{emoji:'😞',label:'슬픔'},{emoji:'😭',label:'눈물'},
+    {emoji:'😡',label:'화남'},{emoji:'😱',label:'공포'},{emoji:'😴',label:'피곤'},
+    {emoji:'🤔',label:'고민'},{emoji:'😕',label:'혼란'},{emoji:'😏',label:'자신감'},
+    {emoji:'😔',label:'우울'},{emoji:'😓',label:'스트레스'},{emoji:'😇',label:'안도'},
+    {emoji:'🤗',label:'친근'},{emoji:'🤒',label:'몸이 아픔'},{emoji:'😶',label:'무감각'},
+    {emoji:'🙃',label:'장난'},{emoji:'🙏',label:'감사'}
+  ];
+
+  const grid = document.querySelector('.emotion-grid');
+  emotions.forEach(({emoji,label}) => {
+    const cell = document.createElement('div');
+    cell.className = 'emotion-cell';
+    cell.innerHTML = `<div class="emo-emoji">${emoji}</div><div>${label}</div>`;
+    grid.appendChild(cell);
+    cell.addEventListener('click', () => {
+      document.querySelectorAll('.emotion-cell').forEach(c=>c.classList.remove('selected'));
+      cell.classList.add('selected');
+      document.getElementById('attReason').style.display = 'block';
+      document.getElementById('attReason').scrollIntoView({ behavior:'smooth' });
+    });
+  });
+
+  // 출석 체크
+  document.getElementById('checkBtn').addEventListener('click', () => {
+    const sel = document.querySelector('.emotion-cell.selected');
+    const reason = document.getElementById('reasonInput').value.trim();
+    if (!sel) return alert('감정을 선택하세요.');
+    if (!reason) return alert('이유를 작성하세요.');
+    // localStorage 저장 예시
+    const key = `attendance_${localStorage.getItem('studentId')}_${today}`;
+    localStorage.setItem(key, JSON.stringify({
+      emoji: sel.querySelector('.emo-emoji').innerText,
+      label: sel.innerText.replace(sel.querySelector('.emo-emoji').innerText,''),
+      reason
+    }));
+    alert('출석 체크 완료!');
+    // 리셋
+    sel.classList.remove('selected');
+    document.getElementById('reasonInput').value = '';
+    document.getElementById('attReason').style.display = 'none';
+  });
+});
+</script>
+
+
     <div id="learning" class="section">
       <h2>배움 정리</h2>
       <p>여기에 수업별 배움 정리 폼을 넣을 수 있습니다.</p>
