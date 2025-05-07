@@ -163,349 +163,350 @@
   });
   
 </script><div class="content">
-  <!-- ====== 비밀 친구 섹션 시작 ====== -->
-  <div id="secret" class="section">
-    <!-- 서브탭 -->
-    <div class="subtabs">
-      <button class="subtab active" data-target="attendance">감정 출석부</button>
-      <button class="subtab"       data-target="diary">일기 쓰기</button>
-    </div>
 
-    <!-- 서브콘텐츠 -->
-    <div class="subcontent">
-      <!-- 1) 감정 출석부 -->
-      <div id="attendance" class="subsection active">
-      <h3>
-        감정 출석부 –
-        <input type="date" id="attDateInput"
-               style="margin-left:0.5rem; padding:0.3rem;"/>
-      </h3>
-      <div class="emotion-grid"></div>
-
-      <div id="attReason" class="attendance-reason" style="display:none; margin-top:1rem;">
-        <input id="reasonInput"
-               type="text" maxlength="20"
-               placeholder="네 마음의 이유가 궁금해. 나에게만 알려줘🤫"
-               style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-        <button id="checkBtn"
-                style="padding:0.6em 1.2em;
-                       background:#64b5f6; color:#fff;
-                       border:none; border-radius:6px;
-                       cursor:pointer;">
-          출석 체크
-        </button>
+  <div class="content">
+    <!-- ====== 비밀 친구 섹션 시작 ====== -->
+    <div id="secret" class="section">
+      <!-- 서브탭 -->
+      <div class="subtabs">
+        <button class="subtab active" data-target="attendance">감정 출석부</button>
+        <button class="subtab"       data-target="diary">일기 쓰기</button>
       </div>
-
-      <h4 style="margin-top:1.5rem;">출석 기록</h4>
-      <ul id="attendanceList"
-          style="list-style:none; padding:0; margin-top:0.5rem;">
-      </ul>
-    </div>
-
-    <!-- 일기 쓰기 -->
-    <div id="diary" class="subsection">
-      <div class="diary-header"
-           style="display:flex;
-                  justify-content:space-between;
-                  align-items:center;
-                  margin-bottom:1rem;">
-        <h3>일기 쓰기</h3>
-        <button id="newDiaryBtn"
-                style="padding:0.5rem 1rem;
-                       background:#64b5f6; color:#fff;
-                       border:none; border-radius:6px;
-                       cursor:pointer;">
-          새 일기 쓰기
-        </button>
+  
+      <!-- 서브콘텐츠 -->
+      <div class="subcontent">
+        <!-- 1) 감정 출석부 -->
+        <div id="attendance" class="subsection active">
+          <h3>
+            감정 출석부 –
+            <input type="date" id="attDateInput"
+                   style="margin-left:0.5rem; padding:0.3rem;" />
+          </h3>
+          <div class="emotion-grid"></div>
+  
+          <div id="attReason" class="attendance-reason"
+               style="display:none; margin-top:1rem;">
+            <input id="reasonInput"
+                   type="text" maxlength="20"
+                   placeholder="네 마음의 이유가 궁금해. 나에게만 알려줘🤫"
+                   style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
+            <button id="checkBtn"
+                    style="padding:0.6em 1.2em;
+                           background:#64b5f6; color:#fff;
+                           border:none; border-radius:6px;
+                           cursor:pointer;">
+              출석 체크
+            </button>
+          </div>
+  
+          <h4 style="margin-top:1.5rem;">출석 기록</h4>
+          <ul id="attendanceList"
+              style="list-style:none; padding:0; margin-top:0.5rem;"></ul>
+        </div>
+  
+        <!-- 2) 일기 쓰기 -->
+        <div id="diary" class="subsection">
+          <div class="diary-header"
+               style="display:flex;
+                      justify-content:space-between;
+                      align-items:center;
+                      margin-bottom:1rem;">
+            <h3>일기 쓰기</h3>
+            <button id="newDiaryBtn"
+                    style="padding:0.5rem 1rem;
+                           background:#64b5f6; color:#fff;
+                           border:none; border-radius:6px;
+                           cursor:pointer;">
+              새 일기 쓰기
+            </button>
+          </div>
+  
+          <!-- 2.1) 일기 목록 -->
+          <div id="diaryList" class="diary-list"></div>
+  
+          <!-- 2.2) 새 일기 쓰기 폼 -->
+          <div id="diaryForm" class="diary-form"
+               style="display:none; max-width:500px; margin-bottom:1rem;">
+            <input id="diaryDate" type="date"
+                   style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
+            <select id="diaryEmotion"
+                    style="width:100%; margin-bottom:0.5rem; padding:0.5rem;"></select>
+            <textarea id="diaryText" rows="6"
+                      placeholder="너의 감정과 경험을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게."
+                      style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
+            <button id="saveDiaryBtn"
+                    style="padding:0.6em 1.2em;
+                           background:#64b5f6; color:#fff;
+                           border:none; border-radius:6px;
+                           cursor:pointer;">
+              저장
+            </button>
+          </div>
+  
+          <!-- 2.3) 일기 보기 -->
+          <div id="diaryView" class="diary-view"
+               style="display:none; max-width:800px; margin:0 auto;">
+            <button id="backDiaryBtn"
+                    style="margin-bottom:1rem; padding:0.4rem 0.8rem;
+                           background:#aaa; color:#fff;
+                           border:none; border-radius:4px;
+                           cursor:pointer;">
+              목록으로
+            </button>
+  
+            <div class="view-container" style="display:flex; gap:1rem;">
+              <!-- 원본 -->
+              <div class="view-col" style="flex:1; padding:1rem;
+                                            border-right:2px dashed #ccc;">
+                <h5>📝 속닥속닥 (원본)</h5>
+                <p id="viewOriginal" style="white-space:pre-wrap;"></p>
+              </div>
+              <!-- AI 제안 -->
+              <div class="view-col" style="flex:1; padding:1rem;
+                                            border-right:2px dashed #ccc;">
+                <h5>💡 AI 제안</h5>
+                <p id="viewAI" style="white-space:pre-wrap;">없음</p>
+              </div>
+              <!-- 최종본 -->
+              <div class="view-col" style="flex:1; padding:1rem;">
+                <h5>✅ 최종본</h5>
+                <canvas id="finalCanvas" width="300" height="200"
+                        style="border:1px solid #ddd; margin-bottom:0.5rem;"></canvas>
+                <button id="submitFinalBtn"
+                        style="display:block; width:100%; padding:0.6em;
+                               background:#64b5f6; color:#fff;
+                               border:none; border-radius:6px;
+                               cursor:pointer;">
+                  최종 제출
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- 1) 일기 목록 -->
-      <div id="diaryList" class="diary-list"></div>
-
-      <!-- 2) 새 일기 쓰기 폼 -->
-      <div id="diaryForm" class="diary-form"
-           style="display:none; max-width:500px; margin-bottom:1rem;">
-        <input id="diaryDate"
-               type="date"
-               style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
-        <select id="diaryEmotion"
-                style="width:100%; margin-bottom:0.5rem; padding:0.5rem;">
-        </select>
-        <textarea id="diaryText"
-                  rows="6"
-                  placeholder="너의 감정과 경험을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게."
-                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
-        <button id="saveDiaryBtn"
-                style="padding:0.6em 1.2em;
-                       background:#64b5f6; color:#fff;
-                       border:none; border-radius:6px;
-                       cursor:pointer;">
-          저장
-        </button>
-      </div>
-
-<!-- 3) 일기 보기 -->
-<div id="diaryView" class="diary-view" style="display:none; max-width:800px; margin:0 auto;">
-  <button id="backDiaryBtn"
-          style="margin-bottom:1rem; padding:0.4rem 0.8rem;
-                 background:#aaa; color:#fff;
-                 border:none; border-radius:4px;
-                 cursor:pointer;">
-    목록으로
-  </button>
-
-  <div class="view-container" style="display:flex; gap:1rem;">
-    <!-- 원본 -->
-    <div class="view-col" style="flex:1; padding:1rem;
-                                  border-right:2px dashed #ccc;">
-      <h5>📝 속닥속닥 (원본)</h5>
-      <p id="viewOriginal" style="white-space:pre-wrap;"></p>
+      <!-- 서브콘텐츠 닫기 -->
     </div>
-
-    <!-- AI 제안 -->
-    <div class="view-col" style="flex:1; padding:1rem;
-                                  border-right:2px dashed #ccc;">
-      <h5>💡 AI 제안</h5>
-      <p id="viewAI" style="white-space:pre-wrap;">없음</p>
-    </div>
-
-    <!-- 최종본 -->
-    <div class="view-col" style="flex:1; padding:1rem;">
-      <h5>✅ 최종본</h5>
-      <!-- 캔버스 대신 textarea 사용하실 경우, 아래 textarea로 대체하세요 -->
-      <canvas id="finalCanvas" width="300" height="200"
-              style="border:1px solid #ddd; margin-bottom:0.5rem;"></canvas>
-      <!-- 만약 손글씨 입력이 아닌 텍스트로 받으실 거면 아래로 변경 -->
-      <!-- <textarea id="viewFinal" rows="6"
-                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea> -->
-
-      <button id="submitFinalBtn"
-              style="display:block; width:100%; padding:0.6em;
-                     background:#64b5f6; color:#fff;
-                     border:none; border-radius:6px;
-                     cursor:pointer;">
-        최종 제출
-      </button>
-    </div>
+    <!-- #secret 끝 -->
   </div>
-</div>
-
-<!-- ====== 비밀 친구 섹션 끝 ====== -->
-
-<style>
-  .subtabs {
-    display: flex; border-bottom:2px solid #ddd; margin-bottom:1rem;
-  }
-  .subtab {
-    flex:1; padding:0.75rem; background:none; border:none;
-    border-bottom:3px solid transparent; font-size:1rem; cursor:pointer;
-  }
-  .subtab.active {
-    border-color:#64b5f6; color:#64b5f6;
-  }
-  .subcontent .subsection { display:none; }
-  .subcontent .subsection.active { display:block; }
-
-  .emotion-grid {
-    display:grid; grid-template-columns:repeat(5,1fr);
-    gap:0.75rem; margin-bottom:1rem;
-  }
-  .emotion-cell {
-    display:flex; flex-direction:column; align-items:center;
-    padding:0.75rem; border:1px solid #ccc; border-radius:8px;
-    cursor:pointer; transition:background .2s, border-color .2s;
-  }
-  .emotion-cell.selected {
-    background:rgba(100,181,246,0.2); border-color:#64b5f6;
-  }
-  .diary-list button {
-    display:block; width:100%; text-align:left; padding:0.5rem;
-    margin-bottom:0.25rem; border:1px solid #ccc; background:#fff;
-    cursor:pointer; border-radius:4px;
-  }
-  .attendance-reason input { font-size:1rem; }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const studentId = localStorage.getItem('studentId');
-  if (!studentId) return location.href='index.html';
-
-  // 날짜 입력
-  const dateInput = document.getElementById('attDateInput');
-  dateInput.value = new Date().toISOString().split('T')[0];
-  dateInput.addEventListener('change', loadAttendance);
-
-  // 탭 전환
-  document.querySelectorAll('.subtab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.subsection').forEach(sec=>sec.classList.remove('active'));
-      document.getElementById(btn.dataset.target).classList.add('active');
-    });
-  });
-
-  // 감정 목록
-  const emotions = [
-    {emoji:'😀',label:'기쁨'},{emoji:'😄',label:'행복'},{emoji:'😍',label:'사랑'},
-    {emoji:'😌',label:'차분'},{emoji:'😂',label:'재미'},{emoji:'🤩',label:'설렘'},
-    {emoji:'😊',label:'만족'},{emoji:'😉',label:'장난'},{emoji:'😜',label:'유쾌'},
-    {emoji:'😐',label:'평범'},{emoji:'😞',label:'슬픔'},{emoji:'😭',label:'눈물'},
-    {emoji:'😡',label:'화남'},{emoji:'😱',label:'공포'},{emoji:'😴',label:'피곤'},
-    {emoji:'🤔',label:'고민'},{emoji:'😕',label:'혼란'},{emoji:'😏',label:'자신감'},
-    {emoji:'😔',label:'우울'},{emoji:'😓',label:'스트레스'},{emoji:'😇',label:'안도'},
-    {emoji:'🤗',label:'친근'},{emoji:'🤒',label:'아픔'},{emoji:'😶',label:'무감각'},
-    {emoji:'🙏',label:'감사'}
-  ];
-
-  // 출석 기록 로드
-  function loadAttendance() {
-    const list = document.getElementById('attendanceList');
-    list.innerHTML = '';
-    const prefix = `attendance_${studentId}_`;
-    Object.keys(localStorage)
-      .filter(key => key.startsWith(prefix))
-      .sort()
-      .forEach(key => {
-        const { emoji, label, reason } = JSON.parse(localStorage.getItem(key));
-        const date = key.replace(prefix, '');
-        const li = document.createElement('li');
-        li.style.padding = '0.4rem 0';
-        li.innerText = `${date} – ${emoji} ${label} – ${reason}`;
-        list.appendChild(li);
+  <!-- .content 끝 -->
+  
+  <style>
+    .subtabs {
+      display: flex; border-bottom:2px solid #ddd; margin-bottom:1rem;
+    }
+    .subtab {
+      flex:1; padding:0.75rem; background:none; border:none;
+      border-bottom:3px solid transparent; font-size:1rem; cursor:pointer;
+    }
+    .subtab.active {
+      border-color:#64b5f6; color:#64b5f6;
+    }
+    .subcontent .subsection { display:none; }
+    .subcontent .subsection.active { display:block; }
+  
+    .emotion-grid {
+      display:grid; grid-template-columns:repeat(5,1fr);
+      gap:0.75rem; margin-bottom:1rem;
+    }
+    .emotion-cell {
+      display:flex; flex-direction:column; align-items:center;
+      padding:0.75rem; border:1px solid #ccc; border-radius:8px;
+      cursor:pointer; transition:background .2s, border-color .2s;
+    }
+    .emotion-cell.selected {
+      background:rgba(100,181,246,0.2); border-color:#64b5f6;
+    }
+    .attendance-reason input { font-size:1rem; }
+  
+    .diary-list button {
+      display:block; width:100%; text-align:left; padding:0.5rem;
+      margin-bottom:0.25rem; border:1px solid #ccc; background:#fff;
+      cursor:pointer; border-radius:4px;
+    }
+  </style>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const studentId = localStorage.getItem('studentId');
+    if (!studentId) return location.href='index.html';
+  
+    // 날짜 입력
+    const dateInput = document.getElementById('attDateInput');
+    dateInput.value = new Date().toISOString().split('T')[0];
+    dateInput.addEventListener('change', loadAttendance);
+  
+    // 탭 전환
+    document.querySelectorAll('.subtab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.subsection').forEach(sec=>sec.classList.remove('active'));
+        document.getElementById(btn.dataset.target).classList.add('active');
       });
-  }
-
-  // 감정 그리드 생성
-  const grid = document.querySelector('.emotion-grid');
-  emotions.forEach(({emoji,label}) => {
-    const cell = document.createElement('div');
-    cell.className = 'emotion-cell';
-    cell.innerHTML = `<div class="emo-emoji">${emoji}</div><div>${label}</div>`;
-    grid.appendChild(cell);
-    cell.addEventListener('click', () => {
-      document.querySelectorAll('.emotion-cell').forEach(c=>c.classList.remove('selected'));
-      cell.classList.add('selected');
-      document.getElementById('attReason').style.display = 'block';
-      document.getElementById('attReason').scrollIntoView({ behavior:'smooth' });
-      // 감정 저장
+    });
+  
+    // 감정 목록
+    const emotions = [
+      {emoji:'😀',label:'기쁨'},{emoji:'😄',label:'행복'},{emoji:'😍',label:'사랑'},
+      {emoji:'😌',label:'차분'},{emoji:'😂',label:'재미'},{emoji:'🤩',label:'설렘'},
+      {emoji:'😊',label:'만족'},{emoji:'😉',label:'장난'},{emoji:'😜',label:'유쾌'},
+      {emoji:'😐',label:'평범'},{emoji:'😞',label:'슬픔'},{emoji:'😭',label:'눈물'},
+      {emoji:'😡',label:'화남'},{emoji:'😱',label:'공포'},{emoji:'😴',label:'피곤'},
+      {emoji:'🤔',label:'고민'},{emoji:'😕',label:'혼란'},{emoji:'😏',label:'자신감'},
+      {emoji:'😔',label:'우울'},{emoji:'😓',label:'스트레스'},{emoji:'😇',label:'안도'},
+      {emoji:'🤗',label:'친근'},{emoji:'🤒',label:'아픔'},{emoji:'😶',label:'무감각'},
+      {emoji:'🙏',label:'감사'}
+    ];
+  
+    // 출석 기록 로드
+    function loadAttendance() {
+      const list = document.getElementById('attendanceList');
+      list.innerHTML = '';
+      const prefix = `attendance_${studentId}_`;
+      Object.keys(localStorage)
+        .filter(key => key.startsWith(prefix))
+        .sort()
+        .forEach(key => {
+          const { emoji, label, reason } = JSON.parse(localStorage.getItem(key));
+          const date = key.replace(prefix, '');
+          const li = document.createElement('li');
+          li.style.padding = '0.4rem 0';
+          li.innerText = `${date} – ${emoji} ${label} – ${reason}`;
+          list.appendChild(li);
+        });
+    }
+  
+    // 감정 그리드 생성
+    const grid = document.querySelector('.emotion-grid');
+    emotions.forEach(({emoji,label}) => {
+      const cell = document.createElement('div');
+      cell.className = 'emotion-cell';
+      cell.innerHTML = `<div class="emo-emoji">${emoji}</div><div>${label}</div>`;
+      grid.appendChild(cell);
+      cell.addEventListener('click', () => {
+        document.querySelectorAll('.emotion-cell').forEach(c=>c.classList.remove('selected'));
+        cell.classList.add('selected');
+        document.getElementById('attReason').style.display = 'block';
+        document.getElementById('attReason').scrollIntoView({ behavior:'smooth' });
+        // 감정 저장
+        const key = `attendance_${studentId}_${dateInput.value}`;
+        localStorage.setItem(key, JSON.stringify({ emoji, label }));
+      });
+    });
+  
+    // 출석 체크
+    document.getElementById('checkBtn').addEventListener('click', () => {
+      const sel = document.querySelector('.emotion-cell.selected');
+      const reason = document.getElementById('reasonInput').value.trim();
+      if (!sel) return alert('감정을 선택하세요.');
+      if (!reason) return alert('이유를 작성하세요.');
       const key = `attendance_${studentId}_${dateInput.value}`;
-      localStorage.setItem(key, JSON.stringify({ emoji, label }));
+      const base = JSON.parse(localStorage.getItem(key));
+      localStorage.setItem(key, JSON.stringify({ ...base, reason }));
+      alert('출석 체크 완료!');
+      sel.classList.remove('selected');
+      document.getElementById('reasonInput').value = '';
+      document.getElementById('attReason').style.display = 'none';
+      loadAttendance();
     });
-  });
-
-  // 출석 체크
-  document.getElementById('checkBtn').addEventListener('click', () => {
-    const sel = document.querySelector('.emotion-cell.selected');
-    const reason = document.getElementById('reasonInput').value.trim();
-    if (!sel) return alert('감정을 선택하세요.');
-    if (!reason) return alert('이유를 작성하세요.');
-    const key = `attendance_${studentId}_${dateInput.value}`;
-    const base = JSON.parse(localStorage.getItem(key));
-    localStorage.setItem(key, JSON.stringify({ ...base, reason }));
-    alert('출석 체크 완료!');
-    sel.classList.remove('selected');
-    document.getElementById('reasonInput').value = '';
-    document.getElementById('attReason').style.display = 'none';
+  
+    // 일기 탭 로직 초기화
+    const diaryList   = document.getElementById('diaryList');
+    const diaryForm   = document.getElementById('diaryForm');
+    const diaryView   = document.getElementById('diaryView');
+    const newBtn      = document.getElementById('newDiaryBtn');
+    const formDate    = document.getElementById('diaryDate');
+    const formEmo     = document.getElementById('diaryEmotion');
+    const formText    = document.getElementById('diaryText');
+    const saveDiary   = document.getElementById('saveDiaryBtn');
+    const backDiary   = document.getElementById('backDiaryBtn');
+    const submitFinal = document.getElementById('submitFinalBtn');
+  
+    // 감정 옵션 채우기
+    emotions.forEach(({emoji,label}) => {
+      const o = document.createElement('option');
+      o.value = label;
+      o.innerText = `${emoji} ${label}`;
+      formEmo.appendChild(o);
+    });
+  
+    // 일기 목록 로드
+    function loadDiaryList() {
+      diaryList.innerHTML = '';
+      const prefix = `diary_${studentId}_`;
+      Object.keys(localStorage)
+        .filter(k => k.startsWith(prefix))
+        .sort().reverse()
+        .forEach(k => {
+          const { date, emotion, text } = JSON.parse(localStorage.getItem(k));
+          const btn = document.createElement('button');
+          btn.innerText = `${date} – ${text.slice(0,8)}...`;
+          btn.addEventListener('click', () => viewEntry(k));
+          diaryList.appendChild(btn);
+        });
+    }
+  
+    // 일기 보기
+    function viewEntry(key) {
+      const data = JSON.parse(localStorage.getItem(key));
+      diaryList.style.display = 'none';
+      diaryForm.style.display = 'none';
+      diaryView.style.display = 'block';
+      document.getElementById('viewDate').innerText    = data.date;
+      document.getElementById('viewEmotion').innerText = data.emotion;
+      document.getElementById('viewOriginal').innerText= data.text;
+      document.getElementById('viewAI').innerText       = data.aiSuggestion || '없음';
+      document.getElementById('viewFinal').innerText    = data.finalContent || '없음';
+    }
+  
+    // 새 일기 작성
+    newBtn.addEventListener('click', () => {
+      diaryList.style.display = 'none';
+      diaryView.style.display = 'none';
+      diaryForm.style.display = 'block';
+      formDate.value = dateInput.value;
+      const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${dateInput.value}`) || '{}');
+      formEmo.value = att.label || '';
+      formText.value = '';
+    });
+  
+    // 일기 저장
+    saveDiary.addEventListener('click', () => {
+      const date    = formDate.value;
+      const emotion = formEmo.value;
+      const text    = formText.value.trim();
+      if (!date || !emotion || !text) return alert('모든 항목을 입력하세요.');
+      const key = `diary_${studentId}_${date}_${Date.now()}`;
+      localStorage.setItem(key, JSON.stringify({
+        date, emotion, text, aiSuggestion:'', finalContent:''
+      }));
+      alert('일기 저장 완료!');
+      diaryForm.style.display = 'none';
+      loadDiaryList();
+      diaryList.style.display = 'block';
+    });
+  
+    // 목록으로 돌아가기
+    backDiary.addEventListener('click', () => {
+      diaryView.style.display = 'none';
+      diaryForm.style.display = 'none';
+      diaryList.style.display = 'block';
+    });
+  
+    // 최종본 제출
+    submitFinal.addEventListener('click', () => {
+      const dataURL = document.getElementById('finalCanvas').toDataURL();
+      const key = `diaryFinal_${studentId}_${document.getElementById('viewDate').innerText}`;
+      localStorage.setItem(key, dataURL);
+      alert('최종본이 제출되었습니다.');
+    });
+  
+    // 초기 로드
     loadAttendance();
-  });
-
-  // 일기 탭 로직
-  const diaryList   = document.getElementById('diaryList');
-  const diaryForm   = document.getElementById('diaryForm');
-  const diaryView   = document.getElementById('diaryView');
-  const newBtn      = document.getElementById('newDiaryBtn');
-  const formDate    = document.getElementById('diaryDate');
-  const formEmo     = document.getElementById('diaryEmotion');
-  const formText    = document.getElementById('diaryText');
-  const saveDiary   = document.getElementById('saveDiaryBtn');
-  const backDiary   = document.getElementById('backDiaryBtn');
-
-  // 감정 옵션 채우기
-  emotions.forEach(({emoji,label}) => {
-    const o = document.createElement('option');
-    o.value = label;
-    o.innerText = `${emoji} ${label}`;
-    formEmo.appendChild(o);
-  });
-
-  function loadDiaryList() {
-    diaryList.innerHTML = '';
-    const prefix = `diary_${studentId}_`;
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(prefix))
-      .sort().reverse()
-      .forEach(k => {
-        const { date, emotion, text } = JSON.parse(localStorage.getItem(k));
-        const btn = document.createElement('button');
-        btn.innerText = `${date} – ${text.slice(0,8)}...`;
-        btn.addEventListener('click', () => viewEntry(k));
-        diaryList.appendChild(btn);
-      });
-  }
-
-  document.getElementById('submitFinalBtn').addEventListener('click', () => {
-    const canvas = document.getElementById('finalCanvas');
-    const dataURL = canvas.toDataURL();
-    // 로컬스토리지에 저장 (키 네이밍 예시)
-    const key = `diaryFinal_${localStorage.getItem('studentId')}_${document.getElementById('viewDate').innerText}`;
-    localStorage.setItem(key, dataURL);
-    alert('최종본이 제출되었습니다.');
-  });
-});
-
-  function viewEntry(key) {
-    const data = JSON.parse(localStorage.getItem(key));
-    diaryList.style.display = 'none';
-    diaryForm.style.display = 'none';
-    diaryView.style.display = 'block';
-    document.getElementById('viewDate').innerText    = data.date;
-    document.getElementById('viewEmotion').innerText = data.emotion;
-    document.getElementById('viewOriginal').innerText= data.text;
-    document.getElementById('viewAI').innerText       = data.aiSuggestion || '없음';
-    document.getElementById('viewFinal').innerText    = data.finalContent || '없음';
-  }
-
-  newBtn.addEventListener('click', () => {
-    diaryList.style.display = 'none';
-    diaryView.style.display = 'none';
-    diaryForm.style.display = 'block';
-    formDate.value = dateInput.value;
-    const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${dateInput.value}`) || '{}');
-    formEmo.value = att.label || '';
-    formText.value = '';
-  });
-
-  saveDiary.addEventListener('click', () => {
-    const date    = formDate.value;
-    const emotion = formEmo.value;
-    const text    = formText.value.trim();
-    if(!date||!emotion||!text) return alert('모든 항목을 입력하세요.');
-    const key = `diary_${studentId}_${date}_${Date.now()}`;
-    localStorage.setItem(key, JSON.stringify({
-      date, emotion, text, aiSuggestion:'', finalContent:''
-    }));
-    alert('일기 저장 완료!');
-    diaryForm.style.display = 'none';
     loadDiaryList();
-    diaryList.style.display = 'block';
   });
-
-  backDiary.addEventListener('click', () => {
-    diaryView.style.display = 'none';
-    diaryForm.style.display = 'none';
-    diaryList.style.display = 'block';
-  });
-
-  // 초기 로드
-  loadAttendance();
-  loadDiaryList();
-});
-</script>
-
-
-
+  </script>
+  
 
     <div id="learning" class="section">
       <h2>배움 정리</h2>
