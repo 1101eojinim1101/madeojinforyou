@@ -193,7 +193,6 @@
         </button>
       </div>
 
-      <!-- 출석 기록 리스트 추가 -->
       <h4 style="margin-top:1.5rem;">출석 기록</h4>
       <ul id="attendanceList"
           style="list-style:none; padding:0; margin-top:0.5rem;">
@@ -222,17 +221,16 @@
 
       <!-- 2) 새 일기 쓰기 폼 -->
       <div id="diaryForm" class="diary-form"
-           style="display:none; max-width:500px;">
+           style="display:none; max-width:500px; margin-bottom:1rem;">
         <input id="diaryDate"
                type="date"
-               style="margin-bottom:0.5rem; padding:0.5rem;" />
+               style="width:100%; margin-bottom:0.5rem; padding:0.5rem;" />
         <select id="diaryEmotion"
                 style="width:100%; margin-bottom:0.5rem; padding:0.5rem;">
         </select>
         <textarea id="diaryText" rows="6"
-                  placeholder="오늘 있었던 일을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게. 가만히 듣고있다가, 네가 정말 원할 때 필요한 조언을 해 줄게."
-                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;">
-        </textarea>
+                  placeholder="네 마음과 경험을 솔직하게 써봐. 너를 평가하거나 판단하지 않을게. 조용히 듣고있다가, 네가 원할 때 필요한 조언을 해줄게."
+                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea>
         <button id="saveDiaryBtn"
                 style="padding:0.6em 1.2em;
                        background:#64b5f6; color:#fff;
@@ -315,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 감정 리스트 정의
+  // 감정 목록
   const emotions = [
     {emoji:'😀',label:'기쁨'},{emoji:'😄',label:'행복'},{emoji:'😍',label:'사랑'},
     {emoji:'😌',label:'차분'},{emoji:'😂',label:'재미'},{emoji:'🤩',label:'설렘'},
@@ -381,14 +379,89 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAttendance();
   });
 
-  // 일기 탭 등 나머지 로직… (기존 네 코드 그대로 유지)
-  // ...
-  
+  // 일기 탭 로직
+  const diaryList   = document.getElementById('diaryList');
+  const diaryForm   = document.getElementById('diaryForm');
+  const diaryView   = document.getElementById('diaryView');
+  const newBtn      = document.getElementById('newDiaryBtn');
+  const formDate    = document.getElementById('diaryDate');
+  const formEmo     = document.getElementById('diaryEmotion');
+  const formText    = document.getElementById('diaryText');
+  const saveDiary   = document.getElementById('saveDiaryBtn');
+  const backDiary   = document.getElementById('backDiaryBtn');
+
+  // 감정 옵션 채우기
+  emotions.forEach(({emoji,label}) => {
+    const o = document.createElement('option');
+    o.value = label;
+    o.innerText = `${emoji} ${label}`;
+    formEmo.appendChild(o);
+  });
+
+  function loadDiaryList() {
+    diaryList.innerHTML = '';
+    const prefix = `diary_${studentId}_`;
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(prefix))
+      .sort().reverse()
+      .forEach(k => {
+        const { date, emotion, text } = JSON.parse(localStorage.getItem(k));
+        const btn = document.createElement('button');
+        btn.innerText = `${date} – ${text.slice(0,8)}...`;
+        btn.addEventListener('click', () => viewEntry(k));
+        diaryList.appendChild(btn);
+      });
+  }
+
+  function viewEntry(key) {
+    const data = JSON.parse(localStorage.getItem(key));
+    diaryList.style.display = 'none';
+    diaryForm.style.display = 'none';
+    diaryView.style.display = 'block';
+    document.getElementById('viewDate').innerText    = data.date;
+    document.getElementById('viewEmotion').innerText = data.emotion;
+    document.getElementById('viewOriginal').innerText= data.text;
+    document.getElementById('viewAI').innerText       = data.aiSuggestion || '없음';
+    document.getElementById('viewFinal').innerText    = data.finalContent || '없음';
+  }
+
+  newBtn.addEventListener('click', () => {
+    diaryList.style.display = 'none';
+    diaryView.style.display = 'none';
+    diaryForm.style.display = 'block';
+    formDate.value = today;
+    const att = JSON.parse(localStorage.getItem(`attendance_${studentId}_${today}`) || '{}');
+    formEmo.value = att.label || '';
+    formText.value = '';
+  });
+
+  saveDiary.addEventListener('click', () => {
+    const date    = formDate.value;
+    const emotion = formEmo.value;
+    const text    = formText.value.trim();
+    if(!date||!emotion||!text) return alert('모든 항목을 입력하세요.');
+    const key = `diary_${studentId}_${date}_${Date.now()}`;
+    localStorage.setItem(key, JSON.stringify({
+      date, emotion, text, aiSuggestion:'', finalContent:''
+    }));
+    alert('일기 저장 완료!');
+    diaryForm.style.display = 'none';
+    loadDiaryList();
+    diaryList.style.display = 'block';
+  });
+
+  backDiary.addEventListener('click', () => {
+    diaryView.style.display = 'none';
+    diaryForm.style.display = 'none';
+    diaryList.style.display = 'block';
+  });
+
   // 초기 로드
   loadAttendance();
-  // loadDiaryList(); 등
+  loadDiaryList();
 });
 </script>
+
 
 
 
