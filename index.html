@@ -3,13 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Madeojin For You</title>
+  <!-- 외부 CSS가 필요하다면 유지 -->
   <link rel="stylesheet" href="static/css/style.css">
+  <style>
+    /* 화면 전체를 flex 컨테이너로 만들어 버튼을 중앙에 배치 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    }
+    /* 버튼 스타일 */
+    #magicBtn {
+      padding: 0.6em 1.2em;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <header>…</header>
-  <main>
-    <button id="magicBtn">Click me</button>
-  </main>
-  <script src="static/js/script.js"></script>
+  <button id="magicBtn">Click me</button>
+
+  <!-- 스크립트 경로: static/script.js -->
+  <script src="static/script.js"></script>
 </body>
 </html>
