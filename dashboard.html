@@ -92,35 +92,27 @@
   </div>
   
   <style>
-    /* .content가 화면 전체를 감싸서 중앙 정렬 */
-    .content {
-      display: flex;
-      justify-content: center;   /* 가로 중앙 */
-      align-items: center;       /* 세로 중앙 */
-      min-height: 100vh;         /* 뷰포트 전체 높이 */
-      padding: 1rem;             /* 좁은 화면에서도 여유 있게 */
-      box-sizing: border-box;
-      background: #f9f9f9;       /* 원하시면 배경색 추가 가능 */
-    }
-  
-    /* 내부 폼 고정 너비 및 세로 정렬 */
-    #info {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    #infoForm {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      width: 360px;
-    }
-  
-    #infoForm h3 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
+#info {
+  /* #info 내부만 가로 중앙 정렬 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+/* 세로 중앙 정렬이 필요하면 이 옵션을 추가하세요. (원치 않으면 뺍니다.) */
+/*
+#info {
+  min-height: calc(100vh - 헤더높이px);  // 헤더가 있다면 그 높이를 빼고
+  justify-content: center;
+}
+*/
+
+#infoForm {
+  width: 360px;
+  /* 기존 margin-top:2rem; 은 남겨두되, 좌우 마진 자동 */
+  margin: 2rem auto 0;
+}
   
     /* 사진 컨테이너는 기존대로 */
     .photo-container {
