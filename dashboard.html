@@ -245,26 +245,52 @@
         </button>
       </div>
 
-      <!-- 3) 일기 보기 -->
-      <div id="diaryView" class="diary-view"
-           style="display:none; max-width:500px;">
-        <button id="backDiaryBtn"
-                style="margin-bottom:1rem;
-                       padding:0.4rem 0.8rem;
-                       background:#aaa; color:#fff;
-                       border:none; border-radius:4px;
-                       cursor:pointer;">
-          목록으로
-        </button>
-        <h4>날짜: <span id="viewDate"></span></h4>
-        <p>감정: <span id="viewEmotion"></span></p>
-        <h5>📝 원본</h5><p id="viewOriginal"></p>
-        <h5>💡 AI 제안</h5><p id="viewAI">없음</p>
-        <h5>✅ 최종</h5><p id="viewFinal">없음</p>
-      </div>
+<!-- 3) 일기 보기 -->
+<div id="diaryView" class="diary-view" style="display:none; max-width:800px; margin:0 auto;">
+  <button id="backDiaryBtn"
+          style="margin-bottom:1rem; padding:0.4rem 0.8rem;
+                 background:#aaa; color:#fff;
+                 border:none; border-radius:4px;
+                 cursor:pointer;">
+    목록으로
+  </button>
+
+  <div class="view-container" style="display:flex; gap:1rem;">
+    <!-- 원본 -->
+    <div class="view-col" style="flex:1; padding:1rem;
+                                  border-right:2px dashed #ccc;">
+      <h5>📝 속닥속닥 (원본)</h5>
+      <p id="viewOriginal" style="white-space:pre-wrap;"></p>
+    </div>
+
+    <!-- AI 제안 -->
+    <div class="view-col" style="flex:1; padding:1rem;
+                                  border-right:2px dashed #ccc;">
+      <h5>💡 AI 제안</h5>
+      <p id="viewAI" style="white-space:pre-wrap;">없음</p>
+    </div>
+
+    <!-- 최종본 -->
+    <div class="view-col" style="flex:1; padding:1rem;">
+      <h5>✅ 최종본</h5>
+      <!-- 캔버스 대신 textarea 사용하실 경우, 아래 textarea로 대체하세요 -->
+      <canvas id="finalCanvas" width="300" height="200"
+              style="border:1px solid #ddd; margin-bottom:0.5rem;"></canvas>
+      <!-- 만약 손글씨 입력이 아닌 텍스트로 받으실 거면 아래로 변경 -->
+      <!-- <textarea id="viewFinal" rows="6"
+                  style="width:100%; padding:0.5rem; margin-bottom:0.5rem;"></textarea> -->
+
+      <button id="submitFinalBtn"
+              style="display:block; width:100%; padding:0.6em;
+                     background:#64b5f6; color:#fff;
+                     border:none; border-radius:6px;
+                     cursor:pointer;">
+        최종 제출
+      </button>
     </div>
   </div>
 </div>
+
 <!-- ====== 비밀 친구 섹션 끝 ====== -->
 
 <style>
@@ -419,6 +445,16 @@ document.addEventListener('DOMContentLoaded', () => {
         diaryList.appendChild(btn);
       });
   }
+
+  document.getElementById('submitFinalBtn').addEventListener('click', () => {
+    const canvas = document.getElementById('finalCanvas');
+    const dataURL = canvas.toDataURL();
+    // 로컬스토리지에 저장 (키 네이밍 예시)
+    const key = `diaryFinal_${localStorage.getItem('studentId')}_${document.getElementById('viewDate').innerText}`;
+    localStorage.setItem(key, dataURL);
+    alert('최종본이 제출되었습니다.');
+  });
+});
 
   function viewEntry(key) {
     const data = JSON.parse(localStorage.getItem(key));
