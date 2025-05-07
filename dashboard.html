@@ -161,21 +161,19 @@
     localStorage.setItem('info_' + studentId, JSON.stringify(obj));
     alert('나의 정보가 저장되었습니다.');
   });
-</script>
+</script><div class="content">
+  <!-- ====== 비밀 친구 섹션 시작 ====== -->
+  <div id="secret" class="section">
+    <!-- 서브탭 -->
+    <div class="subtabs">
+      <button class="subtab active" data-target="attendance">감정 출석부</button>
+      <button class="subtab"       data-target="diary">일기 쓰기</button>
+    </div>
 
-  <div class="content">
-
-<!-- ====== 비밀 친구 섹션 시작 ====== -->
-<div id="secret" class="section">
-  <!-- 서브탭 -->
-  <div class="subtabs">
-    <button class="subtab active" data-target="attendance">감정 출석부</button>
-    <button class="subtab"       data-target="diary">일기 쓰기</button>
-  </div>
-
-  <div class="subcontent">
-    <!-- 감정 출석부 -->
-    <div id="attendance" class="subsection active">
+    <!-- 서브콘텐츠 -->
+    <div class="subcontent">
+      <!-- 1) 감정 출석부 -->
+      <div id="attendance" class="subsection active">
       <h3>
         감정 출석부 –
         <input type="date" id="attDateInput"
