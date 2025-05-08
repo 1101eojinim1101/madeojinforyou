@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>학생 대시보드</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* 사이드바 */
+    nav {
+      width: 180px;
+      background: #b3e5fc;
+      display: flex;
+      flex-direction: column;
+    }
+    nav a {
+      padding: 1rem;
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    nav a:hover, nav a.active {
+      background: #81d4fa;
+    }
+    /* 콘텐츠 영역 */
+    .content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    p {
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 좌측 메뉴 -->
+  <nav id="sidebar">
+    <a data-target="info"   class="active">나의 정보</a>
+    <a data-target="secret">비밀 친구</a>
+    <a data-target="learning">배움 정리</a>
+    <a data-target="footprint">나의 발자국</a>
+    <a data-target="teacher">선생님의 기록</a>
+    <a data-target="growth">성장 기록지</a>
+  </nav>
+
+  <script>
+    const links = document.querySelectorAll('nav a');
+    const sections = document.querySelectorAll('.section');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        // 메뉴 active 토글
+        links.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        // 섹션 active 토글
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(link.dataset.target).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
